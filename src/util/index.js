@@ -1,3 +1,3 @@
-import { LoadLocalImg } from "./img-require";
+import { LoadLocalImg, LoadNetworkImgToBg } from "./img-require";
 
-export { LoadLocalImg };
+export { LoadLocalImg, LoadNetworkImgToBg };

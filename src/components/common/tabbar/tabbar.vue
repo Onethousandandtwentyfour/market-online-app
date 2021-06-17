@@ -4,7 +4,9 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  name: "tabber"
+};
 </script>
 <style lang="less" scoped>
 .common-tabbar-outer {
