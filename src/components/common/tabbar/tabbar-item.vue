@@ -33,7 +33,7 @@ export default {
   computed: {
     activeStyle() {
       return {
-        color: this.isActived ? this.activedColor : "rgb(255,255,255)"
+        color: this.isActived ? this.activedColor : "rgb(0,0,0,0.5)"
       };
     },
     isActived() {
@@ -53,11 +53,17 @@ export default {
   height: 49px;
 
   .icon-outer {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+
+    div,
     img {
-      object-fit: contain;
       width: 17px;
       height: 17px;
-      margin-top: 8px;
+    }
+    img {
+      object-fit: contain;
     }
   }
   .title-outer {
@@ -65,7 +71,6 @@ export default {
       display: block;
       font-size: 14px;
       line-height: 24px;
-      transform: translateY(-6px);
     }
   }
 }

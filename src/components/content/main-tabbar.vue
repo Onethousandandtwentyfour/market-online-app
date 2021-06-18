@@ -3,10 +3,16 @@
     <template v-for="item of tabbarList">
       <tabbar-item :path="item.path" :key="item.path">
         <template #actived-icon>
-          <img :src="loadLocalImgComp(item.activedIcon)" />
+          <div
+            class="bg-contain"
+            :style="loadNetworkImgToBgComp(loadLocalImgComp(item.activedIcon))"
+          ></div>
         </template>
         <template #icon>
-          <img :src="loadLocalImgComp(item.icon)" />
+          <div
+            class="bg-contain"
+            :style="loadNetworkImgToBgComp(loadLocalImgComp(item.icon))"
+          ></div>
         </template>
         <template #text>
           <span>{{ item.text }}</span>

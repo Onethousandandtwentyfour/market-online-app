@@ -1,11 +1,11 @@
 <template>
   <div class="feature-view-outer">
     <template v-for="item of dataSource">
-      <div
+      <img
         class="fv-img-box bg-contain"
-        :style="loadNetworkImgToBgComp(item.acm)"
+        :src="loadLocalImgComp(item.image)"
         :key="item.acm"
-      ></div>
+      />
     </template>
   </div>
 </template>
@@ -15,7 +15,12 @@ export default {
   props: {
     dataSource: {
       type: Array,
-      default: () => []
+      default: () => [
+        {
+          acm: "default-key-acm",
+          image: "home/recommend_bg.jpg"
+        }
+      ]
     }
   }
 };
@@ -24,8 +29,10 @@ export default {
 .feature-view-outer {
   width: 100%;
   position: relative;
+  padding: 10px;
 
   .fv-img-box {
+    object-fit: contain;
     width: 100%;
   }
 }
