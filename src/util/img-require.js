@@ -1,5 +1,5 @@
 export function LoadLocalImg(imgName) {
-  return (!!imgName && require(`@/assets/imgs/tabbar/${imgName}`)) || "";
+  return (!!imgName && require(`@/assets/imgs/${imgName}`)) || "";
 }
 
 export function LoadNetworkImgToBg(imgName) {

@@ -5,54 +5,42 @@
         <div class="home-nav-bar">哇哈哈商城</div>
       </template>
     </nav-bar>
-    <swiper ref="mySwiper" :options="swiperOptions">
-      <template v-for="item of banner">
-        <swiper-slide :key="item.acm">
-          <div
-            class="swiper-img-box"
-            :style="LoadNetworkImgToBg(item.image)"
-          ></div>
-        </swiper-slide>
-      </template>
-    </swiper>
+    <home-swiper :data-source="banner" />
+    <recommend-view :data-source="recommend" />
+    <feature-view :data-source="dKeyword" />
   </div>
 </template>
 <script>
 import NavBar from "@/components/common/navbar";
+import HomeSwiper from "./childComponents/home-swiper";
+import RecommendView from "./childComponents/recommend-view";
+import FeatureView from "./childComponents/feature-view";
 //api
 import { queryHomeData } from "@/network/modal/home";
-//util
-import { LoadNetworkImgToBg } from "@/util";
+
 export default {
   name: "home",
   components: {
-    NavBar
+    NavBar,
+    HomeSwiper,
+    RecommendView,
+    FeatureView
   },
   data() {
     return {
-      swiperOptions: {
-        direction: "horizontal",
-        observer: true,
-        loop: true,
-        autoplay: true
-      },
       banner: [],
       recommend: [],
+      dKeyword: [],
       keywords: []
     };
   },
-  computed: {
-    LoadNetworkImgToBg() {
-      return imgName => {
-        return LoadNetworkImgToBg(imgName);
-      };
-    }
-  },
+
   async created() {
     try {
-      const { banner, recommend, keywords } = await queryHomeData();
+      const { banner, recommend, dKeyword, keywords } = await queryHomeData();
       this.banner = banner?.list ?? this.banner;
       this.recommend = recommend?.list ?? this.recommend;
+      this.dKeyword = dKeyword?.list ?? this.dKeyword;
       this.keywords = keywords?.list ?? this.keywords;
     } catch (err) {
       console.log("err", err);
@@ -71,14 +59,6 @@ export default {
   .home-nav-bar {
     font-size: 16px;
     color: rgb(255, 255, 255);
-  }
-
-  .swiper-img-box {
-    width: 100vw;
-    height: calc(100vw * 390 / 750);
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
   }
 }
 </style>

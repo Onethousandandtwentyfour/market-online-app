@@ -13,3 +13,9 @@ body {
   height: 100%;
   overflow: hidden;
 }
+
+.bg-contain {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
