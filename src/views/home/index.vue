@@ -5,7 +5,11 @@
         <div class="home-nav-bar">哇哈哈商城</div>
       </template>
     </nav-bar>
-    <div class="page-inner">
+    <vue-better-scroll
+      class="page-inner"
+      :show-back-top-min="-600"
+      @pullingUp="pullingUp"
+    >
       <home-swiper :data-source="banner" />
       <recommend-view :data-source="recommend" />
       <feature-view />
@@ -14,7 +18,8 @@
         @change="cateGoryChange"
       />
       <goods-list :dataSource="goodsListDataSource" />
-    </div>
+      <div v-show="showNoMoreData" class="no-more-data-tips">没有更多数据</div>
+    </vue-better-scroll>
   </div>
 </template>
 <script>
@@ -24,13 +29,12 @@ import RecommendView from "./childComponents/recommend-view";
 import FeatureView from "./childComponents/feature-view";
 import ControllerTabbar from "@/components/content/controller-tabbar";
 import GoodsList from "@/components/content/goods/list";
+import VueBetterScroll from "@/components/content/vue-better-scroll";
 //api
-import { queryHomeData, queryHomeDataByType } from "@/network/modal/home";
-
-//debug data
-const PopTotalData = require("./debug/pop.json");
-const NewsTotalData = require("./debug/news.json");
-const SellTotalData = require("./debug/sell.json");
+import {
+  queryHomeBannerAndRecommendDataAsync,
+  queryHomeCategotyDataAsync
+} from "@/network/modal/home";
 
 export default {
   name: "home",
@@ -40,7 +44,8 @@ export default {
     RecommendView,
     FeatureView,
     ControllerTabbar,
-    GoodsList
+    GoodsList,
+    VueBetterScroll
   },
   data() {
     return {
@@ -62,9 +67,9 @@ export default {
           }
         ],
         data: {
-          pop: { page: 0, dataSource: [] },
-          news: { page: 0, dataSource: [] },
-          sell: { page: 0, dataSource: [] }
+          pop: { isMax: false, page: 0, dataSource: [] },
+          news: { isMax: false, page: 0, dataSource: [] },
+          sell: { isMax: false, page: 0, dataSource: [] }
         },
         currentShowKey: "pop"
       }
@@ -75,36 +80,83 @@ export default {
       return this.categoryDataSource.data[
         this.categoryDataSource.currentShowKey
       ].dataSource;
+    },
+    showNoMoreData() {
+      return this.categoryDataSource.data[
+        this.categoryDataSource.currentShowKey
+      ].isMax;
     }
   },
   created() {
-    this.queryHomeDataAsync();
-    this.queryHomeDataByTypeAsync("pop", 1);
+    this.queryHomeBannerAndRecommendDataTri();
   },
   methods: {
-    async queryHomeDataAsync() {
+    //触发--查询首页banner及recommend数据
+    async queryHomeBannerAndRecommendDataTri() {
       try {
-        const { banner, recommend } = await queryHomeData();
+        const {
+          banner,
+          recommend
+        } = await queryHomeBannerAndRecommendDataAsync();
         this.banner = banner?.list ?? this.banner;
         this.recommend = recommend?.list ?? this.recommend;
       } catch (err) {
-        console.log("queryHomeDataAsync err", err);
+        console.log("queryHomeBannerAndRecommendDataTri err", err);
       }
     },
-    async queryHomeDataByTypeAsync(type, page) {
-      this.categoryDataSource.data.pop.dataSource = PopTotalData;
-      this.categoryDataSource.data.news.dataSource = NewsTotalData;
-      this.categoryDataSource.data.sell.dataSource = SellTotalData;
-      return;
+    //执行-请求查询分类数据
+    async queryHomeCategotyDataByTypeExe(params) {
       try {
-        const resp = await queryHomeDataByType({ type, page });
+        !params.hasOwnProperty("size") && (params["size"] = 6);
+        const resp = await queryHomeCategotyDataAsync(params);
+        //数据加载成功后再page++
+        this.categoryDataSource.data[params.type].page++;
+        //有数据就push
+        resp.data.length > 0 &&
+          this.categoryDataSource.data[params.type].dataSource.push(
+            ...resp.data
+          );
+        //是否还有更多数据--本次响应数据length小于size,且当前page*size大于total
+        this.categoryDataSource.data[params.type].isMax =
+          resp.data.length < params.size ||
+          this.categoryDataSource.data[params.type].page * params.size >
+            resp.total;
+        console.log(
+          `${params.type} 类别下第${params.page}页,每页${params.size}条,共${resp.total}条数据`,
+          this.categoryDataSource.data[params.type].isMax
+            ? "没有更多数据"
+            : "还有数据"
+        );
       } catch (err) {
-        console.log("queryHomeDataByTypeAsync err", err);
+        console.log("queryHomeCategotyDataByTypeExe err", err);
+      } finally {
+        return this.categoryDataSource.data[params.type].isMax;
       }
     },
+    //触发-查询分类数据-分页
+    queryHomeCategotyDataByTypeTri() {
+      const currentShowKey = this.categoryDataSource.currentShowKey,
+        currentData = this.categoryDataSource.data[currentShowKey];
+      if (currentData.isMax) {
+        console.log(`类别-${currentShowKey}-的数据已达最大`);
+        return;
+      }
+      const params = {
+        type: this.categoryDataSource.currentShowKey,
+        page: currentData.page + 1
+      };
+      return this.queryHomeCategotyDataByTypeExe(params);
+    },
+    //切换分类
     cateGoryChange(ev) {
       const { key } = ev;
       !!ev && (this.categoryDataSource.currentShowKey = key);
+    },
+    //触发上拉
+    pullingUp(next) {
+      this.queryHomeCategotyDataByTypeTri().then(isMax => {
+        next(isMax);
+      });
     }
   }
 };
@@ -124,10 +176,16 @@ export default {
   }
 
   .page-inner {
-    overflow: scroll;
-    height: 100%;
     width: 100%;
-    padding-bottom: 100px;
+    height: calc(100% - 44px - 49px);
+    overflow: hidden;
+
+    .no-more-data-tips {
+      font-size: 14px;
+      line-height: 5;
+      text-align: center;
+      color: deeppink;
+    }
   }
 }
 </style>

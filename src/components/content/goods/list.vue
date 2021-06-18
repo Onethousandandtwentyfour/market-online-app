@@ -7,6 +7,7 @@
 </template>
 <script>
 import GoodsItem from "./item";
+
 export default {
   name: "goods-list",
   components: {

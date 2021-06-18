@@ -1,16 +1,16 @@
 # market-online-app
 
-## 第三方配置项
-
-### 重置默认标签样式
+## 第三方工具
 
 [normalize.css](https://yarnpkg.com/en/package/normalize.css)
+
+[better-scroll](https://github.com/ustbhuangyi/better-scroll)
 
 ## 文件夹结构
 
 ### loading...
 
-## vue-cli-3.x
+## Tips
 
 - webpack-config.js 也可以写在 vue.config.js 中，方便管理
 

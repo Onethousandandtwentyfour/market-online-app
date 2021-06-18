@@ -36,26 +36,26 @@ export default {
       tabbarList: [
         {
           path: "/home",
-          activedIcon: "tabbar/tabbarhome.actived.png",
-          icon: "tabbar/tabbarhome.png",
+          activedIcon: "common/tabbar/tabbarhome.actived.png",
+          icon: "common/tabbar/tabbarhome.png",
           text: "首页"
         },
         {
           path: "/category",
-          activedIcon: "tabbar/icon_tabbar_gzt_default.actived.png",
-          icon: "tabbar/icon_tabbar_gzt_default.png",
+          activedIcon: "common/tabbar/icon_tabbar_gzt_default.actived.png",
+          icon: "common/tabbar/icon_tabbar_gzt_default.png",
           text: "分类"
         },
         {
           path: "/cart",
-          activedIcon: "tabbar/tabbar-bookmark.actived.png",
-          icon: "tabbar/tabbar-bookmark.png",
+          activedIcon: "common/tabbar/tabbar-bookmark.actived.png",
+          icon: "common/tabbar/tabbar-bookmark.png",
           text: "购物车"
         },
         {
           path: "/user",
-          activedIcon: "tabbar/icontabbarmyup.actived.png",
-          icon: "tabbar/icontabbarmyup.png",
+          activedIcon: "common/tabbar/icontabbarmyup.actived.png",
+          icon: "common/tabbar/icontabbarmyup.png",
           text: "我的"
         }
       ]

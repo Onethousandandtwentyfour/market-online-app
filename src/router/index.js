@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "@/store";
 
 // 路由懒加载
 const Home = () => import("@/views/home");
@@ -12,29 +13,60 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "",
-    redirect: "/home"
+    redirect: "/home",
+    meta: {
+      title: "加载中..."
+    }
   },
   {
     path: "/home",
-    component: Home
+    component: Home,
+    meta: {
+      title: "首页"
+    }
   },
   {
     path: "/user",
-    component: User
+    component: User,
+    meta: {
+      title: "我的"
+    }
   },
   {
     path: "/category",
-    component: Category
+    component: Category,
+    meta: {
+      title: "分类"
+    }
   },
   {
     path: "/cart",
-    component: Cart
+    component: Cart,
+    meta: {
+      title: "购物车"
+    }
   }
 ];
 
 const router = new VueRouter({
-  routes,
-  mode: "history"
+  routes
+});
+
+const whitelist = {};
+router.beforeEach((to, from, next) => {
+  if (!Object.values(whitelist).includes(to.path)) {
+    //非白名单路由
+    if (!store.state.loginTokan) {
+      //未登录
+      next(whitelist.login);
+      return;
+    }
+  }
+  document.title = to.matched
+    .map(item => item.meta.title)
+    .filter(item => item)
+    .join("-");
+  next();
 });
 
 export default router;
