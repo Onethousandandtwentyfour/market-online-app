@@ -33,16 +33,14 @@ export default {
     controlClick(ev) {
       const { index } = ev.currentTarget.dataset;
       this.currentIndex = index * 1;
-      this.$emit("change", this.title[index]);
+      this.$emit("change", { ...this.title[index], index });
     }
   }
 };
 </script>
 <style lang="less" scoped>
 .controller-tabbar-outer {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  position: relative;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -67,7 +65,6 @@ export default {
     color: @activeColor;
 
     span {
-      box-shadow: 0 0 10px @activeColor inset;
       border-bottom-color: @activeColor;
     }
   }

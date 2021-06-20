@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item-outer" v-if="goods">
+  <div class="goods-item-outer" v-if="goods" @click.stop="goodsClick">
     <div
       class="gi-img bg-contain"
       :style="loadNetworkImgToBgComp(goods.pic)"
@@ -29,6 +29,11 @@ export default {
     goods: {
       type: Object,
       default: null
+    }
+  },
+  methods: {
+    goodsClick() {
+      this.$router.push("/goods-detail");
     }
   }
 };

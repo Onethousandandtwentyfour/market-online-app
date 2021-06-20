@@ -8,6 +8,8 @@ const User = () => import("@/views/user");
 const Category = () => import("@/views/category");
 const Cart = () => import("@/views/cart");
 
+const GoodsDetail = () => import("@/views/goods-detail");
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -44,6 +46,13 @@ const routes = [
     component: Cart,
     meta: {
       title: "购物车"
+    }
+  },
+  {
+    path: "/goods-detail",
+    component: GoodsDetail,
+    meta: {
+      title: "商品详情"
     }
   }
 ];

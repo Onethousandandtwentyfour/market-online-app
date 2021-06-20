@@ -32,12 +32,14 @@ export default {
 <style lang="less" scoped>
 .nav-bar-outer {
   width: 100%;
+  position: relative;
+  z-index: 10;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   & div {
-    flex: 1;
     line-height: 44px;
-    overflow: hidden;
   }
 
   .left {
@@ -45,6 +47,7 @@ export default {
   }
 
   .center {
+    flex: 1;
     position: relative;
   }
 

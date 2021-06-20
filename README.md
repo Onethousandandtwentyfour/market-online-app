@@ -12,15 +12,11 @@
 
 ## Tips
 
-- webpack-config.js 也可以写在 vue.config.js 中，方便管理
+- vue.config.js
 
-**vue.config.js**
+- 事件总线
 
-```js
-module.exports = {
-  configureWebpack: {
-    //相关配置与webpack.config.js内的配置项一致
-  },
-};
-```
+Vue.prototype.$bus = new Vue();
+
+
 

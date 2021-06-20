@@ -20,24 +20,26 @@ const SellTotalData = require("../debug/sell.json");
 export function queryHomeCategotyDataAsync(params = {}) {
   const { type, page = 1, size = 10 } = params;
   return new Promise((resolve, reject) => {
-    switch (type) {
-      case "pop": {
-        resolve(getListByPage(PopTotalData, page, size));
-        break;
+    setTimeout(() => {
+      switch (type) {
+        case "pop": {
+          resolve(getListByPage(PopTotalData, page, size));
+          break;
+        }
+        case "news": {
+          resolve(getListByPage(NewsTotalData, page, size));
+          break;
+        }
+        case "sell": {
+          resolve(getListByPage(SellTotalData, page, size));
+          break;
+        }
+        default: {
+          reject({ errMsg: "type不能为空" });
+          break;
+        }
       }
-      case "news": {
-        resolve(getListByPage(NewsTotalData, page, size));
-        break;
-      }
-      case "sell": {
-        resolve(getListByPage(SellTotalData, page, size));
-        break;
-      }
-      default: {
-        reject({ errMsg: "type不能为空" });
-        break;
-      }
-    }
+    }, 600);
   });
 }
 

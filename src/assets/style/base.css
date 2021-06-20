@@ -1,4 +1,9 @@
 @import "./normalize.css";
+@import "./icon.css";
+
+:root {
+  --normal-color: red;
+}
 
 *,
 *::before,

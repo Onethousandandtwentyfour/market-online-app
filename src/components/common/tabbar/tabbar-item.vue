@@ -5,12 +5,7 @@
     @click.stop="tabbarItemClick"
   >
     <div class="icon-outer">
-      <div v-show="isActived">
-        <slot name="actived-icon"></slot>
-      </div>
-      <div v-show="!isActived">
-        <slot name="icon"></slot>
-      </div>
+      <slot name="icon"></slot>
     </div>
     <div class="title-outer">
       <slot name="text"></slot>
@@ -57,13 +52,8 @@ export default {
     display: flex;
     justify-content: center;
 
-    div,
-    img {
-      width: 17px;
-      height: 17px;
-    }
-    img {
-      object-fit: contain;
+    div {
+      font-size: 17px;
     }
   }
   .title-outer {
