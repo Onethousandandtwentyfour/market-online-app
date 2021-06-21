@@ -33,7 +33,9 @@ export default {
   },
   methods: {
     goodsClick() {
-      this.$router.push("/goods-detail");
+      // this.$router.push("/goods-detail");
+      // this.$emit("goodsItemClick", this.goods);
+      this.$bus.$emit("goodsItemClick", this.goods);
     }
   }
 };

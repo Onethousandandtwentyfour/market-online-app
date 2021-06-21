@@ -6,7 +6,7 @@ import request from "@/network/http";
  * @returns bannerlist
  */
 export function queryHomeBannerAndRecommendDataAsync(params = {}) {
-  return request({ url: "/home/multidata", params });
+    return request({ url: "/home/multidata", params });
 }
 
 /**
@@ -18,40 +18,44 @@ const PopTotalData = require("../debug/pop.json");
 const NewsTotalData = require("../debug/news.json");
 const SellTotalData = require("../debug/sell.json");
 export function queryHomeCategotyDataAsync(params = {}) {
-  const { type, page = 1, size = 10 } = params;
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      switch (type) {
-        case "pop": {
-          resolve(getListByPage(PopTotalData, page, size));
-          break;
-        }
-        case "news": {
-          resolve(getListByPage(NewsTotalData, page, size));
-          break;
-        }
-        case "sell": {
-          resolve(getListByPage(SellTotalData, page, size));
-          break;
-        }
-        default: {
-          reject({ errMsg: "type不能为空" });
-          break;
-        }
-      }
-    }, 600);
-  });
+    const { type, page = 1, size = 10 } = params;
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            switch (type) {
+                case "pop":
+                    {
+                        resolve(getListByPage(PopTotalData, page, size));
+                        break;
+                    }
+                case "news":
+                    {
+                        resolve(getListByPage(NewsTotalData, page, size));
+                        break;
+                    }
+                case "sell":
+                    {
+                        resolve(getListByPage(SellTotalData, page, size));
+                        break;
+                    }
+                default:
+                    {
+                        reject({ errMsg: "type不能为空" });
+                        break;
+                    }
+            }
+        }, 100);
+    });
 }
 
 /**
  * 数据分页&&模仿后端数据
  */
 function getListByPage(list, page, size) {
-  const total = list.length;
-  const data = list.slice((page - 1) * size, page * size);
-  return {
-    total,
-    data,
-    page
-  };
+    const total = list.length;
+    const data = list.slice((page - 1) * size, page * size);
+    return {
+        total,
+        data,
+        page
+    };
 }

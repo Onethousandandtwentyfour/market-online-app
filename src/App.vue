@@ -1,13 +1,15 @@
 <template>
   <div id="app">
     <keep-alive>
-      <router-view />
+      <router-view v-if="!$route.meta.noCaches" />
     </keep-alive>
-    <main-tabbar />
+    <router-view v-if="$route.meta.noCaches" />
+    <main-tabbar v-if="$route.meta.showTabbar" />
   </div>
 </template>
 <script>
 import MainTabbar from "@/components/content/main-tabbar";
+
 export default {
   name: "app",
   components: {

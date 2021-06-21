@@ -11,8 +11,10 @@ Vue.config.productionTip = false;
 
 Vue.mixin(ImgMixin);
 
+Vue.prototype.$bus = new Vue();
+
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount("#app");

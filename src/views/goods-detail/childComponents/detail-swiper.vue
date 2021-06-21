@@ -30,7 +30,7 @@ export default {
           delay: 3000,
           disableOnInteraction: false //触摸后停止自动关东
         },
-        loop: true,
+        loop: this.dataSource.length > 1,
         pagination: {
           el: ".swiper-pagination"
         }
@@ -42,6 +42,6 @@ export default {
 <style lang="less" scoped>
 .swiper-img-box {
   width: 100vw;
-  height: calc(100vw * 390 / 750);
+  height: 100vw;
 }
 </style>

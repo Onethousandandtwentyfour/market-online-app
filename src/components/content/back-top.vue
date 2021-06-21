@@ -5,6 +5,8 @@
   ></div>
 </template>
 <script>
+// loadLocalImgComp2('@/assets/imgs/common/top.png')
+// loadLocalImgComp('common/top.png')
 export default {
   name: "back-top"
 };

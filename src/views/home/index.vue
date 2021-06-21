@@ -83,7 +83,8 @@ export default {
           sell: { isMax: false, page: 0, dataSource: [] }
         },
         currentShowKey: ""
-      }
+      },
+      goodsItemClickHandler: null
     };
   },
   computed: {
@@ -106,6 +107,20 @@ export default {
   },
   created() {
     this.queryHomeBannerAndRecommendDataTri();
+    this.goodsItemClickHandler = ({ itemId }) => {
+      const { currentShowKey } = this.categoryDataSource;
+      this.$router.push({
+        path: "/goods-detail",
+        query: {
+          type: currentShowKey,
+          id: itemId
+        }
+      });
+    };
+    this.$bus.$on("goodsItemClick", this.goodsItemClickHandler);
+  },
+  beforeDestroy() {
+    this.$bus.$off("goodsItemClick", this.goodsItemClickHandler);
   },
   methods: {
     //触发--查询首页banner及recommend数据
