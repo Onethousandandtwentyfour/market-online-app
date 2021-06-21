@@ -2,7 +2,7 @@
   <div class="bs-scroll-outer" v-bind="$attrs">
     <div ref="wrapper" class="wrapper">
       <div>
-        <div class="pull-down-loading">
+        <div class="pull-down-loading" v-if="pullDown">
           <div v-show="beforePullDown">
             <span style="color:orange">释放开始刷新</span>
           </div>
@@ -16,7 +16,9 @@
           </div>
         </div>
         <slot name="default"></slot>
-        <div class="no-more-data-tips">{{ showNoMoreDataText }}</div>
+        <div class="no-more-data-tips" v-if="pullUp">
+          {{ showNoMoreDataText }}
+        </div>
       </div>
     </div>
     <div v-show="showTopFixed" class="top-fixed">
@@ -40,6 +42,14 @@ export default {
     BackTop
   },
   props: {
+    pullUp: {
+      type: Boolean,
+      default: false
+    },
+    pullDown: {
+      type: Boolean,
+      default: false
+    },
     showBackTopByOuter: {
       type: Boolean,
       default: true
@@ -89,19 +99,23 @@ export default {
       this.bsInstance = new BScroll(this.$refs.wrapper, {
         click: true,
         probeType: 3,
-        pullUpLoad: true,
-        pullDownRefresh: true
+        pullUpLoad: this.pullUp,
+        pullDownRefresh: this.pullDown
       });
       this.bsInstance.on("scroll", this.scrollHandler);
-      this.bsInstance.on("pullingUp", this.pullingUpHandler);
-      this.bsInstance.on("pullingDown", this.pullingDownHandler);
+      if (this.pullUp) {
+        this.bsInstance.on("pullingUp", this.pullingUpHandler);
+      }
+      if (this.pullDown) {
+        this.bsInstance.on("pullingDown", this.pullingDownHandler);
+      }
       this.pullingDownHandler();
     },
     //重置better-scroll状态
     resetBsPullState() {
       this.bsInstance &&
-        (this.bsInstance.finishPullDown(),
-        this.bsInstance.finishPullUp(),
+        (this.pullDown && this.bsInstance.finishPullDown(),
+        this.pullUp && this.bsInstance.finishPullUp(),
         this.bsInstance.refresh());
     },
     //回到顶部
@@ -124,9 +138,9 @@ export default {
       const pullingDownCallback = (isMax = false) => {
         this.isPullingDown = false;
         if (!isMax) {
-          this.bsInstance.finishPullDown();
+          this.pullDown && this.bsInstance.finishPullDown();
         }
-        this.bsInstance.finishPullUp(); //最后一页刷新
+        this.pullUp && this.bsInstance.finishPullUp(); //最后一页刷新
         this.bsInstance.refresh();
         setTimeout(() => {
           this.isPullingDown = true;
@@ -140,9 +154,9 @@ export default {
     pullingUpHandler() {
       const pullingUpCallback = (isMax = false) => {
         if (!isMax) {
-          this.bsInstance.finishPullUp();
+          this.pullUp && this.bsInstance.finishPullUp();
         }
-        this.bsInstance.finishPullDown(); //第一页数据没返回时 上拉
+        this.pullDown && this.bsInstance.finishPullDown(); //第一页数据没返回时 上拉
         this.bsInstance.refresh();
       };
       this.$emit("pullingUp", pullingUpCallback.bind(this));

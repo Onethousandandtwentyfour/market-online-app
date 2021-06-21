@@ -1,9 +1,19 @@
 <template>
   <div class="goods-detail-outer">
     <detail-navbar />
-    <detail-swiper :data-source="swiperDataSource" />
-    <detail-card :data-source="goodsDetail" />
-    <detail-seller :data-source="goodsDetail" />
+    <vue-better-scroll
+      class="page-inner"
+      :pull-up="false"
+      :pull-down="false"
+      :show-back-top-min="-windowInnerWidth"
+      @pullingDown="pullingDown"
+    >
+      <detail-swiper :data-source="swiperDataSource" />
+      <detail-card :data-source="goodsDetail" />
+      <detail-seller :data-source="goodsDetail" />
+      <div style="width:100%;height:100vh;background:rgba(25,0,0,0.1)"></div>
+    </vue-better-scroll>
+    <detail-tabbar />
   </div>
 </template>
 <script>
@@ -11,7 +21,8 @@ import DetailNavbar from "./childComponents/detail-navbar";
 import DetailSwiper from "./childComponents/detail-swiper";
 import DetailCard from "./childComponents/detail-card";
 import DetailSeller from "./childComponents/detail-seller";
-
+import DetailTabbar from "./childComponents/detail-tabbar";
+import VueBetterScroll from "@/components/content/vue-better-scroll";
 // api
 import { queryGoodsDetailByIdAsync } from "@/network/modal/goods-detail";
 export default {
@@ -20,7 +31,9 @@ export default {
     DetailNavbar,
     DetailSwiper,
     DetailCard,
-    DetailSeller
+    DetailSeller,
+    DetailTabbar,
+    VueBetterScroll
   },
   data() {
     return {
@@ -38,15 +51,12 @@ export default {
         ]) ||
         []
       );
+    },
+    windowInnerWidth() {
+      return window.innerWidth;
     }
   },
-  mounted() {
-    const { type, id } = this.$route.query;
-    console.log(`type:${type}`, `id:${id}`);
-    this.queryGoodsDetailByIdExe({ type, id }).then(data => {
-      this.goodsDetail = data;
-    });
-  },
+  mounted() {},
   // activated() {
   //   const { type, id } = this.$route.query;
   //   console.log(`type:${type}`, `id:${id}`);
@@ -68,6 +78,18 @@ export default {
       } finally {
         return resp;
       }
+    },
+    pullingDown(next) {
+      const { type, id } = this.$route.query;
+      this.queryGoodsDetailByIdExe({ type, id })
+        .then(data => {
+          this.goodsDetail = data;
+        })
+        .then(() => {
+          this.$nextTick(() => {
+            next();
+          });
+        });
     }
   }
 };
@@ -80,6 +102,12 @@ export default {
   width: 100%;
   height: 100%;
   background: rgb(240, 240, 240);
+
+  .page-inner {
+    width: 100%;
+    height: calc(100% - 44px - 49px);
+    overflow: hidden;
+  }
 }
 </style>
 00

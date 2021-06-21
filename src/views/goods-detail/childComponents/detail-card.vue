@@ -12,7 +12,7 @@
     <div class="card-tips-box">
       <span>月销{{ dataSource.monthSellCount }}</span>
       <span>免邮费</span>
-      <span>72小时发货</span>
+      <span>{{ dataSource.provcity }}</span>
     </div>
   </div>
 </template>

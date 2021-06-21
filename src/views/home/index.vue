@@ -8,6 +8,8 @@
     <vue-better-scroll
       ref="bsscroll"
       class="page-inner"
+      :pull-up="true"
+      :pull-down="true"
       :has-more-data="showNoMoreData"
       :show-back-top-min="showBackTopMin"
       :show-top-fixed-min="showBackTopMin"
